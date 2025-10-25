@@ -3,190 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Strategy Board</title>
+    <title>Intuitive Strategy Board</title>
     <style>
-        /* CSS: 모던 무채색 디자인 및 기능 개선 */
         :root {
-            --bg-main: #1e1e1e;
-            --bg-sidebar: #252526;
-            --bg-element: #333333;
-            --bg-hover: #444444;
-            --text-primary: #cccccc;
-            --text-secondary: #999999;
-            --border-color: #444444;
-            --accent-active: #007acc;
-            --purple-team: #9b59b6;
-            --yellow-team: #f1c40f;
-            --danger-color: #c0392b;
+            --bg-main: #1e1e1e; --bg-sidebar: #252526; --bg-element: #333333;
+            --bg-hover: #444444; --text-primary: #cccccc; --text-secondary: #999999;
+            --border-color: #444444; --accent-active: #007acc; --purple-team: #9b59b6;
+            --yellow-team: #f1c40f; --danger-color: #c0392b;
         }
-
-        * {
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            overflow: hidden;
-            user-select: none;
-            background-color: var(--bg-main);
-            color: var(--text-primary);
+            margin: 0; overflow: hidden; user-select: none;
+            background-color: var(--bg-main); color: var(--text-primary);
         }
+        .container { display: flex; width: 100vw; height: 100vh; }
 
-        .container {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        /* --- 사이드바 --- */
         .sidebar {
-            width: 260px; /* 기본 너비 */
-            min-width: 200px; /* 최소 너비 */
-            max-width: 500px; /* 최대 너비 */
-            background-color: var(--bg-sidebar);
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            flex-shrink: 0;
-            /* [기능] 스크롤바 숨기기 */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            width: 260px; min-width: 200px; max-width: 500px;
+            background-color: var(--bg-sidebar); padding: 20px;
+            overflow-y: auto; display: flex; flex-direction: column;
+            gap: 25px; flex-shrink: 0;
+            -ms-overflow-style: none; scrollbar-width: none;
         }
-        .sidebar::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
+        .sidebar::-webkit-scrollbar { display: none; }
         
-        /* [기능] 사이드바 크기 조절 핸들 */
         #resizer {
-            width: 5px;
-            height: 100%;
-            cursor: col-resize;
+            width: 5px; height: 100%; cursor: col-resize;
             background-color: var(--bg-element);
-            transition: background-color 0.2s ease;
-            flex-shrink: 0;
+            transition: background-color 0.2s ease; flex-shrink: 0;
         }
-        #resizer:hover {
-            background-color: var(--accent-active);
-        }
+        #resizer:hover { background-color: var(--accent-active); }
 
         .sidebar h2 {
-            text-align: center;
-            margin: 0 0 15px 0;
-            font-size: 1.2em;
-            font-weight: 500;
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-color);
+            text-align: center; margin: 0 0 15px 0; font-size: 1.2em;
+            font-weight: 500; border-bottom: 1px solid var(--border-color);
             padding-bottom: 15px;
         }
-
-        .sidebar-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        .sidebar-section ul { list-style: none; padding: 0; margin: 0; }
         .sidebar-section li {
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            border-radius: 5px;
-            background-color: var(--bg-element);
-            font-size: 0.95em;
-            transition: background-color 0.2s ease;
+            padding: 10px 15px; margin-bottom: 8px; cursor: pointer;
+            border-radius: 5px; background-color: var(--bg-element);
+            font-size: 0.95em; transition: background-color 0.2s ease;
         }
-        .sidebar-section li:hover {
-            background-color: var(--bg-hover);
-        }
+        .sidebar-section li:hover { background-color: var(--bg-hover); }
 
-        /* --- 그리기 도구 --- */
         .tool-group { margin-bottom: 15px; }
         .tool-group label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-            color: var(--text-secondary);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8px; font-size: 0.9em; color: var(--text-secondary);
         }
         .tool-group input[type="color"] {
-            width: 100%; height: 35px; cursor: pointer;
-            border: 1px solid var(--border-color); border-radius: 5px;
-            -webkit-appearance: none; appearance: none; padding: 0; background: none;
+            width: 100%; height: 35px; cursor: pointer; border: 1px solid var(--border-color);
+            border-radius: 5px; -webkit-appearance: none; appearance: none;
+            padding: 0; background: none;
         }
         .tool-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
         .tool-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
         .tool-group input[type="range"] {
             width: 100%; cursor: pointer; -webkit-appearance: none; appearance: none;
-            height: 3px; background: var(--bg-element); border-radius: 3px; outline: none;
+            height: 6px; background: var(--bg-element); border-radius: 3px; outline: none;
         }
         .tool-group input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
             background: var(--text-primary); border-radius: 50%;
         }
+        .tool-group .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-        .tool-group .button-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+        .button {
+            width: 100%; padding: 10px; border: none; background-color: var(--bg-element);
+            color: var(--text-primary); cursor: pointer; border-radius: 5px;
+            transition: background-color 0.2s ease;
         }
-
-        .button, .mode-toggle-btn {
-            width: 100%; padding: 10px; border: none;
-            background-color: var(--bg-element); color: var(--text-primary);
-            cursor: pointer; border-radius: 5px; transition: background-color 0.2s ease;
-        }
-        .button:hover, .mode-toggle-btn:hover { background-color: var(--bg-hover); }
-
+        .button:hover { background-color: var(--bg-hover); }
         #clear-canvas-btn { background-color: var(--danger-color); color: white; }
         #clear-canvas-btn:hover { background-color: #e74c3c; }
-        .mode-toggle-btn { background-color: var(--accent-active); color: white; }
-        .mode-toggle-btn:hover { background-color: #3598db; }
-        .mode-toggle-btn.active { background-color: var(--yellow-team); color: #333; }
 
-        /* --- 맵 컨테이너 --- */
         #map-container {
-            flex-grow: 1;
-            position: relative;
-            background-color: #000;
-            background-size: contain;
-            background-position: center;
+            flex-grow: 1; position: relative; background-color: #000;
+            background-size: contain; background-position: center;
             background-repeat: no-repeat;
         }
+        #drawing-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
 
-        /* --- 그리기 캔버스 --- */
-        #drawing-canvas {
-            position: absolute; top: 0; left: 0; pointer-events: none;
-        }
-        body.drawing-mode #drawing-canvas {
-            pointer-events: auto; cursor: crosshair;
-        }
-
-        /* --- 유저 아이콘 --- */
         .user-icon {
-            width: 42px; height: 42px;
-            border-radius: 50%; position: absolute; cursor: grab;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 15px; color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-            background-size: cover; background-position: center;
-            border: 3px solid; box-sizing: border-box; font-weight: 600;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 42px; height: 42px; border-radius: 50%; position: absolute;
+            cursor: grab; display: flex; justify-content: center; align-items: center;
+            font-size: 15px; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            background-size: cover; background-position: center; border: 3px solid;
+            box-sizing: border-box; font-weight: 600; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             transition: transform 0.1s ease-in-out;
         }
         .user-icon:active { cursor: grabbing; transform: scale(1.1); }
-        .team-purple {
-            border-color: var(--purple-team);
-            background-color: rgba(155, 89, 182, 0.6);
-        }
-        .team-yellow {
-            border-color: var(--yellow-team);
-            background-color: rgba(241, 196, 15, 0.6);
-        }
+        .team-purple { border-color: var(--purple-team); background-color: rgba(155, 89, 182, 0.6); }
+        .team-yellow { border-color: var(--yellow-team); background-color: rgba(241, 196, 15, 0.6); }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 사이드바 -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-section">
                 <h2>맵 선택</h2>
@@ -199,7 +113,6 @@
             </div>
             <div class="sidebar-section">
                 <h2>그리기 도구</h2>
-                <button class="mode-toggle-btn" id="toggle-draw-mode">그리기 모드</button>
                 <div class="tool-group">
                     <label for="color-picker">색상</label>
                     <input type="color" id="color-picker" value="#E74C3C">
@@ -216,17 +129,11 @@
                 </div>
             </div>
         </div>
-
-        <!-- 사이드바 크기 조절 핸들 -->
         <div id="resizer"></div>
-
-        <!-- 메인 맵 영역 -->
         <div id="map-container">
             <canvas id="drawing-canvas"></canvas>
         </div>
     </div>
-
-    <!-- 유저 이미지 변경을 위한 숨겨진 input 요소 -->
     <input type="file" id="image-input" accept="image/*" style="display: none;">
 
     <script>
@@ -238,17 +145,17 @@
         const imageInput = document.getElementById('image-input');
         const canvas = document.getElementById('drawing-canvas');
         const ctx = canvas.getContext('2d');
-        const toggleDrawModeBtn = document.getElementById('toggle-draw-mode');
         const colorPicker = document.getElementById('color-picker');
         const brushSize = document.getElementById('brush-size');
         const brushSizeLabel = document.getElementById('brush-size-label');
         const eraserBtn = document.getElementById('eraser-btn');
         const clearCanvasBtn = document.getElementById('clear-canvas-btn');
 
-        let activeIcon = null, isDrawMode = false, isDrawing = false;
+        // --- 상태 변수 ---
+        let activeIcon = null, isDrawing = false;
         let nextPurpleId = 1, nextYellowId = 1;
 
-        // --- 캔버스 및 맵 설정 ---
+        // --- 초기화 및 리사이즈 ---
         function resizeCanvas() {
             const mapRect = mapContainer.getBoundingClientRect();
             canvas.width = mapRect.width;
@@ -268,60 +175,67 @@
         setMap("Arena.webp");
         window.addEventListener('resize', resizeCanvas);
 
-        // --- [기능] 사이드바 크기 조절 로직 ---
+        // --- 사이드바 크기 조절 ---
         let isResizing = false;
-        resizer.addEventListener('mousedown', (e) => {
-            isResizing = true;
-            document.body.style.cursor = 'col-resize'; // 전체 커서 변경
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-        });
-        function handleMouseMove(e) {
+        resizer.addEventListener('mousedown', () => { isResizing = true; });
+        document.addEventListener('mousemove', (e) => {
             if (!isResizing) return;
             const newWidth = e.clientX;
-            const minWidth = parseInt(getComputedStyle(sidebar).minWidth);
-            const maxWidth = parseInt(getComputedStyle(sidebar).maxWidth);
-            if (newWidth > minWidth && newWidth < maxWidth) {
+            if (newWidth > 200 && newWidth < 500) {
                 sidebar.style.width = `${newWidth}px`;
-                resizeCanvas(); // 사이드바 크기가 변하면 캔버스도 다시 그림
+                resizeCanvas();
             }
-        }
-        function handleMouseUp() {
-            isResizing = false;
-            document.body.style.cursor = 'default';
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-        }
-
-        // --- 모드 전환 ---
-        toggleDrawModeBtn.addEventListener('click', () => {
-            isDrawMode = !isDrawMode;
-            document.body.classList.toggle('drawing-mode', isDrawMode);
-            toggleDrawModeBtn.classList.toggle('active', isDrawMode);
-            toggleDrawModeBtn.textContent = isDrawMode ? '아이콘 이동 모드' : '그리기 모드';
         });
-
-        // --- 맵 변경 ---
+        document.addEventListener('mouseup', () => { isResizing = false; });
+        
+        // --- 맵 선택 ---
         sidebar.addEventListener('click', (e) => {
             if (e.target.tagName === 'LI' && e.target.dataset.map) {
                 setMap(e.target.dataset.map);
             }
         });
 
-        // --- 컨텍스트 메뉴 방지 ---
-        mapContainer.addEventListener('contextmenu', (e) => e.preventDefault());
+        // --- 마우스 이벤트 핸들링 (핵심 로직) ---
 
-        // --- 유저 추가/삭제 ---
+        // mousedown: 작업의 시작을 결정
         mapContainer.addEventListener('mousedown', (e) => {
-            if (isDrawMode || e.button !== 2) return;
-            if (e.target.classList.contains('user-icon')) {
-                e.target.remove();
-            } else if (e.target.id === 'map-container' || e.target.id === 'drawing-canvas') {
-                createUserIcon(e.clientX, e.clientY);
+            // 좌클릭: 아이콘 이동 또는 그리기 시작
+            if (e.button === 0) {
+                if (e.target.classList.contains('user-icon')) {
+                    handleIconDrag(e.target, e);
+                } else {
+                    startDrawing(e);
+                }
             }
         });
 
-        // --- 유저 아이콘 생성 ---
+        // contextmenu: 우클릭 메뉴를 제어하고, 우클릭 액션을 처리
+        mapContainer.addEventListener('contextmenu', (e) => {
+            e.preventDefault(); // [버그 수정] 브라우저 메뉴를 항상 비활성화
+            if (e.target.classList.contains('user-icon')) {
+                e.target.remove(); // 아이콘 위에서 우클릭 시 삭제
+            } else {
+                createUserIcon(e.clientX, e.clientY); // 빈 공간에서 우클릭 시 생성
+            }
+        });
+
+        // mousemove: 드래그 또는 그리기 진행
+        document.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                draw(e);
+            }
+        });
+
+        // mouseup: 모든 작업을 종료
+        document.addEventListener('mouseup', () => {
+            if (isDrawing) {
+                isDrawing = false;
+                ctx.beginPath();
+            }
+        });
+        
+        // --- 기능 함수들 ---
+
         function createUserIcon(x, y) {
             const icon = document.createElement('div');
             icon.classList.add('user-icon');
@@ -335,24 +249,24 @@
                 icon.textContent = `P${nextPurpleId++}`;
             }
             const mapRect = mapContainer.getBoundingClientRect();
-            icon.style.left = `${x - mapRect.left - 21}px`; // 아이콘 너비/2
-            icon.style.top = `${y - mapRect.top - 21}px`; // 아이콘 높이/2
+            icon.style.left = `${x - mapRect.left - 21}px`;
+            icon.style.top = `${y - mapRect.top - 21}px`;
             mapContainer.appendChild(icon);
-            addIconEventListeners(icon);
+            icon.addEventListener('dblclick', () => {
+                activeIcon = icon;
+                imageInput.click();
+            });
         }
 
-        // --- 아이콘 이벤트 리스너 ---
-        function addIconEventListeners(icon) {
-            let isDragging = false, offset = { x: 0, y: 0 };
-            icon.addEventListener('mousedown', (e) => {
-                if (isDrawMode || e.button !== 0) return;
-                isDragging = true;
-                offset.x = e.clientX - icon.getBoundingClientRect().left;
-                offset.y = e.clientY - icon.getBoundingClientRect().top;
-                icon.style.cursor = 'grabbing';
-            });
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
+        function handleIconDrag(icon, initialEvent) {
+            let isDraggingIcon = true;
+            let offset = {
+                x: initialEvent.clientX - icon.getBoundingClientRect().left,
+                y: initialEvent.clientY - icon.getBoundingClientRect().top
+            };
+
+            function onMouseMove(e) {
+                if (!isDraggingIcon) return;
                 const mapRect = mapContainer.getBoundingClientRect();
                 let newX = e.clientX - mapRect.left - offset.x;
                 let newY = e.clientY - mapRect.top - offset.y;
@@ -360,18 +274,18 @@
                 newY = Math.max(0, Math.min(newY, mapRect.height - icon.offsetHeight));
                 icon.style.left = `${newX}px`;
                 icon.style.top = `${newY}px`;
-            });
-            document.addEventListener('mouseup', () => {
-                if (isDragging) { isDragging = false; icon.style.cursor = 'grab'; }
-            });
-            icon.addEventListener('dblclick', () => {
-                if (isDrawMode) return;
-                activeIcon = icon;
-                imageInput.click();
-            });
+            }
+
+            function onMouseUp() {
+                isDraggingIcon = false;
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp, true);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp, { once: true, capture: true });
         }
 
-        // --- 이미지 변경 ---
         imageInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files[0] && activeIcon) {
                 const reader = new FileReader();
@@ -384,36 +298,29 @@
             }
         });
 
-        // --- 그리기 기능 ---
-        function startDrawing(e) { isDrawing = true; draw(e); }
-        function stopDrawing() { if (isDrawing) { isDrawing = false; ctx.beginPath(); } }
+        function startDrawing(e) {
+            isDrawing = true;
+            const canvasRect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvasRect.left, e.clientY - canvasRect.top);
+            draw(e);
+        }
+
         function draw(e) {
-            if (!isDrawing || !isDrawMode) return;
+            if (!isDrawing) return;
             const canvasRect = canvas.getBoundingClientRect();
             ctx.lineTo(e.clientX - canvasRect.left, e.clientY - canvasRect.top);
             ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(e.clientX - canvasRect.left, e.clientY - canvasRect.top);
         }
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
 
         function setPenMode() { ctx.globalCompositeOperation = 'source-over'; }
-        colorPicker.addEventListener('input', (e) => {
-            ctx.strokeStyle = e.target.value; setPenMode();
-        });
+        colorPicker.addEventListener('input', (e) => { ctx.strokeStyle = e.target.value; setPenMode(); });
         brushSize.addEventListener('input', (e) => {
             brushSizeLabel.textContent = e.target.value;
             ctx.lineWidth = e.target.value; setPenMode();
         });
-        eraserBtn.addEventListener('click', () => {
-            ctx.globalCompositeOperation = 'destination-out';
-        });
-        clearCanvasBtn.addEventListener('click', () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        });
+        eraserBtn.addEventListener('click', () => { ctx.globalCompositeOperation = 'destination-out'; });
+        clearCanvasBtn.addEventListener('click', () => { ctx.clearRect(0, 0, canvas.width, canvas.height); });
     });
     </script>
 </body>
